@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>WorkMate Pro - Donate</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f1f5f9;
+      color: #1e293b;
+    }
+
+    .card-premium {
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e2e8f0;
+    }
+
+   
+    .bank-card {
+      background: #2563eb; /* Sof WorkMate ko'k rangi */
+      border-radius: 24px;
+      padding: 24px;
+      color: white;
+      position: relative;
+      box-shadow: 0 12px 24px rgba(37, 99, 235, 0.25);
+    }
+
+
+    .bank-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at top right, rgba(255,255,255,0.15), transparent);
+      border-radius: 24px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 65px;
+      background: white;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 1000;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .bottom-nav a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #94a3b8;
+      text-decoration: none;
+    }
+
+    .bottom-nav a.active { color: #2563eb; }
+    .bottom-nav i { font-size: 19px; }
+    .bottom-nav span { font-size: 10px; font-weight: 700; text-transform: uppercase; margin-top: 2px; }
+
+    .donate-input {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      transition: 0.2s;
+    }
+
+    .donate-input:focus {
+      border-color: #2563eb;
+      background: white;
+      outline: none;
+    }
+
+    .btn-tg {
+      background: #2563eb;
+      color: white;
+      border-radius: 18px;
+      padding: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body class="p-5 pb-24">
+
+<div class="max-w-md mx-auto space-y-6">
+    
+    <div class="card-premium p-6">
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-black text-slate-900">Loyihani qo'llab-quvvatlang</h2>
+        </div>
+
+        <div class="bank-card mb-8">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <p class="text-[10px] uppercase tracking-[2px] opacity-70">Karta egasi</p>
+                    <h3 class="text-lg font-bold">Abdullox Mirzabaxromov</h3>
+                </div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Uzcard_logo.png" alt="Uzcard" class="h-4 brightness-0 invert opacity-80">
+            </div>
+            
+            <div>
+                <p class="text-[10px] uppercase tracking-[2px] opacity-70 mb-2">Karta raqami</p>
+                <div class="flex items-center justify-between gap-1 flex-nowrap">
+                    <span class="font-mono text-[17px] font-bold tracking-[1.5px] whitespace-nowrap">8600 0000 0000 1234</span>
+                    <button onclick="navigator.clipboard.writeText('8600000000001234')" class="bg-white/20 p-2 rounded-lg active:scale-90 transition-all">
+                        <i class="far fa-copy text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <input type="text" id="donorName" placeholder="Ismingiz" class="donate-input w-full p-4 rounded-2xl text-sm font-semibold">
+            <input type="number" id="donorAmount" placeholder="Summa (UZS)" class="donate-input w-full p-4 rounded-2xl text-sm font-bold">
+            <button onclick="addDonation()" class="w-full bg-[#2563eb] text-white py-4 rounded-2xl font-bold active:scale-[0.98] transition-all">
+                Hadiya yuborish
+            </button>
+        </div>
+    </div>
+
+    <div class="card-premium p-6">
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Faol donaterlar</h3>
+        <div id="donatersList" class="space-y-3">
+            <div class="flex items-center justify-between p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white text-xs">AM</div>
+                    <div>
+                        <p class="text-sm font-bold text-slate-800">Asilbek Mansurov</p>
+                        <p class="text-[10px] text-slate-400">Yaqinda</p>
+                    </div>
+                </div>
+                <span class="text-sm font-black text-blue-600">50,000 UZS</span>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://t.me/Workfindchi_bot" target="_blank" class="btn-tg">
+        <i class="fab fa-telegram-plane"></i>
+        <span>WorkMate Support</span>
+    </a>
+
+</div>
+
+<nav class="bottom-nav">
+    <a href="{% url 'home' %}"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="{% url 'index' %}"><i class="fa-solid fa-briefcase"></i><span>Ishlar</span></a>
+    <a href="{% url 'acaunt' %}"><i class="fa-solid fa-user-tie"></i><span>Profi</span></a>
+    <a href="{% url 'haqida' %}" class="active"><i class="fa-solid fa-circle-info"></i><span>turi</span></a>
+    <a href="{% url 'about' %}"><i class="fa-solid fa-circle-question"></i><span>Yordam</span></a>
+</nav>
+
+<script>
+function addDonation() {
+    const nameInput = document.getElementById('donorName');
+    const amountInput = document.getElementById('donorAmount');
+    
+    if(!amountInput.value) {
+        alert("Iltimos, summani kiriting");
+        return;
+    }
+
+    const list = document.getElementById('donatersList');
+    const name = nameInput.value || "Saxovatli inson";
+    const initials = name.substring(0,2).toUpperCase();
+    
+    const html = `
+        <div class="flex items-center justify-between p-3 bg-blue-50 border border-blue-100 rounded-2xl shadow-sm animate-pulse">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white text-xs">${initials}</div>
+                <div>
+                    <p class="text-sm font-bold text-slate-800">${name}</p>
+                    <p class="text-[10px] text-slate-400">Hozirgina</p>
+                </div>
+            </div>
+            <span class="text-sm font-black text-blue-600">${Number(amountInput.value).toLocaleString()} UZS</span>
+        </div>
+    `;
+    
+    list.insertAdjacentHTML('afterbegin', html);
+    nameInput.value = "";
+    amountInput.value = "";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Workmate Pro | Academy Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --main: #4f46e5; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: #f8fafc; 
+            -webkit-tap-highlight-color: transparent; 
+            padding-bottom: 100px; 
+        }
+        
+        /* Job Card Styling */
+        .job-card {
+            background: white; border-radius: 22px; padding: 14px;
+            border: 1px solid #f1f5f9; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex; flex-direction: column; gap: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .job-card:active { transform: scale(0.95); background: #f1f5f9; }
+
+        /* Video Container 16:9 */
+        .video-container {
+            position: relative; padding-bottom: 56.25%; height: 0;
+            overflow: hidden; border-radius: 20px; background: #000;
+            margin: 15px 0; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .video-container iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px); border-top: 1px solid #f1f5f9;
+            display: flex; justify-content: space-around;
+            padding: 12px 10px 25px 10px; z-index: 1000;
+        }
+        .bottom-nav a {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 4px; text-decoration: none; color: #94a3b8; transition: 0.3s; width: 20%;
+        }
+        .bottom-nav a i { font-size: 20px; }
+        .bottom-nav a span { font-size: 10px; font-weight: 700; }
+        .bottom-nav a.active { color: var(--main); }
+
+        /* Modal Settings */
+        #course-modal { 
+            transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1); 
+            transform: translateY(100%); 
+        }
+        #course-modal.open { transform: translateY(0); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+
+        .quiz-opt {
+            width: 100%; padding: 16px; border-radius: 18px;
+            background: #1e293b; border: 1px solid #334155;
+            color: white; font-weight: 700; text-align: left;
+            transition: 0.2s; font-size: 14px; margin-bottom: 8px;
+        }
+        .quiz-opt.correct { background: #10b981; border-color: #10b981; }
+        .quiz-opt.wrong { background: #ef4444; border-color: #ef4444; }
+    </style>
+</head>
+<body>
+
+<header class="px-5 pt-6 pb-4">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="text-2xl font-black text-slate-900 leading-tight">Mening <span class="text-indigo-600">Akademiyam</span></h2>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">80 xil yo'nalish bo'yicha ta'lim</p>
+        </div>
+        <img src="https://ui-avatars.com/api/?name=Abdullox&background=4f46e5&color=fff" class="w-10 h-10 rounded-full border-2 border-white shadow-sm">
+    </div>
+    
+    <div class="relative">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-300"></i>
+        <input id="job-search" type="text" placeholder="Kasblarni qidirish..." 
+               class="w-full pl-11 pr-4 py-4 rounded-2xl bg-white border-none shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm">
+    </div>
+</header>
+
+<main id="jobs-grid" class="px-5 grid grid-cols-2 gap-4">
+    </main>
+
+<nav class="bottom-nav">
+  <a href="{% url 'home' %}"><i class="fa-solid fa-house"></i><span>Home</span></a>
+  <a href="{% url 'index' %}"><i class="fa-solid fa-briefcase"></i><span>Ishlar</span></a>
+  <a href="{% url 'acaunt' %}" class="active"><i class="fa-solid fa-user-tie"></i><span>Profi</span></a>
+  <a href="{% url 'haqida' %}"><i class="fa-solid fa-circle-info"></i><span>Turi</span></a>
+  <a href="{% url 'about' %}"><i class="fa-solid fa-circle-question"></i><span>Yordam</span></a>
+</nav>
+
+<div id="course-modal" class="fixed inset-0 bg-white z-[2000] flex flex-col overflow-hidden">
+    <div class="px-6 py-4 border-b flex justify-between items-center">
+        <button onclick="closeCourse()" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+        <div class="text-center">
+            <h4 id="m-title" class="font-bold text-slate-900 text-[10px] uppercase">Yuklanmoqda...</h4>
+            <div id="m-prog" class="flex gap-1 mt-1 justify-center"></div>
+        </div>
+        <div class="w-10"></div>
+    </div>
+
+    <div class="flex-1 overflow-y-auto no-scrollbar p-6">
+        <div id="m-content"></div>
+        
+        <div id="m-quiz" class="mt-4 hidden">
+            <div class="bg-slate-900 rounded-[30px] p-6 shadow-2xl">
+                <span class="text-indigo-400 text-[10px] font-bold uppercase">Bilimni sinash</span>
+                <p id="q-text" class="text-white font-bold text-lg mt-2 mb-6"></p>
+                <div id="q-options"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-5 border-t bg-white">
+        <button id="m-btn" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black shadow-lg shadow-indigo-100 uppercase tracking-wider">Darsni boshlash</button>
+    </div>
+</div>
+
+<script>
+const CATEGORY_MAP = {
+    "IT": ["Sintaksis", "Algoritm", "Baza", "API", "Server", "Frontend"],
+    "Dizayn": ["Rang", "Shrift", "UX", "UI", "Logo", "Layout"],
+    "Biznes": ["Marketing", "Sotuv", "Mijoz", "Strategiya", "Analitika", "Brend"],
+    "Texnik": ["Xavfsizlik", "Asbob", "Diagnostika", "Payka", "Plata", "Tok"]
+};
+
+const TITLES = [
+    "Frontend Dasturchi", "Python Backend", "UI/UX Dizayner", "SMM Menejer", "Logistika Dispetcheri",
+    "Avto Elektrik", "Professional Oshpaz", "1C Buxgalter", "Mobil Ustasi", "Cyber Security",
+    "Interior Designer", "Targetolog", "Video Editor", "Copywriter", "3D Modeler", "HR Menejer"
+];
+for(let i=16; i<80; i++) TITLES.push(`Mutaxassis #${i+1}`);
+
+const JOBS_DB = TITLES.map((t, i) => {
+    let type = "Texnik";
+    if(t.includes("Dastur") || t.includes("Backend") || t.includes("Security")) type = "IT";
+    if(t.includes("Dizayn") || t.includes("Editor") || t.includes("Model")) type = "Dizayn";
+    if(t.includes("SMM") || t.includes("Menejer") || t.includes("Buxgalter")) type = "Biznes";
+
+    return {
+        id: i+1,
+        title: t,
+        icon: type === "IT" ? "fa-code" : type === "Dizayn" ? "fa-palette" : type === "Biznes" ? "fa-chart-pie" : "fa-screwdriver-wrench",
+        color: ["indigo", "emerald", "rose", "amber", "sky"][i % 5],
+        lessons: Array.from({length: 50}, (_, idx) => {
+            const topic = CATEGORY_MAP[type][idx % 6];
+            return {
+                title: `${idx+1}-Dars: ${topic} asoslari`,
+                text: `Ushbu bosqichda siz <b>${t}</b> yo'nalishidagi eng muhim bilimlardan biri bo'lgan <u>${topic}</u> texnologiyasini chuqur o'rganasiz.`,
+                video: "https://www.youtube.com/embed/EsQrXWFTKhs?si=kVtcguA8WiZKbh81",
+                quiz: {
+                    q: `${topic} bo'yicha asosiy ish prinsipi nima?`,
+                    a: ["Sifatli yondashuv", "Tezkor natija", "Faqat nazariya", "E'tiborsizlik"],
+                    r: 0
+                }
+            };
+        })
+    };
+});
+
+let currentJob = null;
+let lessonIdx = 0;
+
+function render() {
+    const grid = document.getElementById('jobs-grid');
+    grid.innerHTML = JOBS_DB.map(job => `
+        <div onclick="openCourse(${job.id})" class="job-card">
+            <div class="w-10 h-10 bg-${job.color}-50 text-${job.color}-600 rounded-xl flex items-center justify-center text-lg">
+                <i class="fa-solid ${job.icon}"></i>
+            </div>
+            <h4 class="font-bold text-slate-800 text-[13px] leading-tight line-clamp-2">${job.title}</h4>
+            <div class="flex justify-between items-center mt-auto pt-2">
+                <span class="text-[9px] font-black text-slate-400">50 DARSLIK</span>
+                <i class="fa-solid fa-circle-play text-indigo-500 text-xs"></i>
+            </div>
+        </div>
+    `).join('');
+}
+
+function openCourse(id) {
+    currentJob = JOBS_DB.find(j => j.id === id);
+    lessonIdx = 0;
+    document.getElementById('m-title').textContent = currentJob.title;
+    document.getElementById('course-modal').classList.add('open');
+    loadLesson(0);
+}
+
+function loadLesson(idx) {
+    lessonIdx = idx;
+    const lesson = currentJob.lessons[idx];
+    
+    const dots = document.getElementById('m-prog');
+    dots.innerHTML = Array.from({length: 8}, (_, i) => 
+        `<div class="w-1.5 h-1.5 rounded-full ${i === idx % 8 ? 'bg-indigo-600' : 'bg-slate-200'}"></div>`
+    ).join('');
+
+    document.getElementById('m-content').innerHTML = `
+        <span class="text-indigo-600 font-black text-[10px] uppercase tracking-widest">${idx+1}-DARS</span>
+        <h2 class="text-3xl font-black text-slate-900 mt-2 mb-4">${lesson.title}</h2>
+        <div class="bg-slate-50 p-6 rounded-[24px] text-slate-600 leading-relaxed text-sm mb-4">
+            ${lesson.text}
+        </div>
+        
+        <div class="video-container">
+            <iframe src="${lesson.video}" allowfullscreen></iframe>
+        </div>
+        <p class="text-[10px] text-center text-slate-400 italic mb-4">Videoni ko'rib bo'lgach, testni boshlang</p>
+    `;
+
+    document.getElementById('m-quiz').classList.add('hidden');
+    document.getElementById('m-btn').textContent = "Bilimni sinash (TEST)";
+    document.getElementById('m-btn').onclick = showQuiz;
+}
+
+function showQuiz() {
+    const lesson = currentJob.lessons[lessonIdx];
+    document.getElementById('m-quiz').classList.remove('hidden');
+    document.getElementById('q-text').textContent = lesson.quiz.q;
+    
+    const opts = document.getElementById('q-options');
+    opts.innerHTML = lesson.quiz.a.map((opt, i) => `
+        <button onclick="checkAnswer(${i}, ${lesson.quiz.r}, this)" class="quiz-opt">${opt}</button>
+    `).join('');
+    
+    document.getElementById('m-btn').textContent = "TESTNI YECHING";
+}
+
+function checkAnswer(selected, correct, btn) {
+    if(selected === correct) {
+        btn.classList.add('correct');
+        setTimeout(() => {
+            if(lessonIdx < 49) loadLesson(lessonIdx + 1);
+            else { alert("Tabriklaymiz! Kursni tugatdingiz."); closeCourse(); }
+        }, 1000);
+    } else {
+        btn.classList.add('wrong');
+        alert("Xato! Videoni qayta ko'ring.");
+    }
+}
+
+function closeCourse() {
+    document.getElementById('course-modal').classList.remove('open');
+}
+
+document.getElementById('job-search').oninput = (e) => {
+    const val = e.target.value.toLowerCase();
+    document.querySelectorAll('.job-card').forEach(card => {
+        card.style.display = card.textContent.toLowerCase().includes(val) ? "flex" : "none";
+    });
+};
+
+render();
+</script>
+</body>
+</html>

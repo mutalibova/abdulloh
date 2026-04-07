@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frontend Dasturchi O‘rganish</title>
+<script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+  body { font-family: sans-serif; background-color: #f0f9ff; padding: 2rem; }
+  .content { max-width: 800px; margin: auto; background:white; padding:2rem; border-radius:1rem; }
+  h1 { color:#0ea5e9; margin-bottom:1rem; }
+  p { margin-bottom:0.75rem; line-height:1.6; color:#374151; }
+  iframe { width:100%; height:400px; border:none; margin-top:1rem; border-radius:0.5rem; }
+
+    body {
+    font-family: sans-serif;
+    background-color: #f0f9ff;
+    padding: 2rem;
+    padding-bottom: 90px;
+  }
+
+  .bottom-nav{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid #e5e7eb;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    z-index: 999;
+  }
+
+  .bottom-nav a{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+    font-size: 12px;
+    color: #6b7280;
+    text-decoration: none;
+  }
+
+  .bottom-nav a i{
+    font-size: 20px;
+  }
+
+  .bottom-nav a.active{
+    color: #0ea5e9;
+  }
+</style>
+</head>
+<body>
+
+<div class="content">
+  <h1>Frontend Dasturchi bo‘lish</h1>
+  <p>Frontend dasturchi veb-sayt va ilovalarning foydalanuvchi interfeysini yaratadi.</p>
+  <p>U HTML orqali sahifa tuzilishini, CSS orqali dizayn va stil berishni o‘rganadi.</p>
+  <p>JavaScript yordamida interaktivlik qo‘shadi: tugmalar, animatsiyalar va formalar ishlaydi.</p>
+  <p>Responsive dizayn bilan mobil va desktop qurilmalarda yaxshi ishlashni bilishi kerak.</p>
+  <p>Frontend freymvorklar (React, Vue, Angular) yordamida tezroq va samarali ilovalar yaratadi.</p>
+  <p>Version control tizimlari, masalan Git, bilan ishlash Frontend uchun muhim.</p>
+  <p>Browserlar va ularning xatoliklarini tushunib, optimizatsiya qilish kerak.</p>
+  <p>HTML semantikasi va accessibility (kirish imkoniyati) Frontend standartlariga kiradi.</p>
+  <p>Performance optimization va sahifa yuklash tezligi foydalanuvchi tajribasini yaxshilaydi.</p>
+  <p>Frontend dasturchi backend bilan API orqali ma’lumotlarni uzatishni ham bilishi kerak.</p>
+  
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Mrqg43JTnCA?si=NqR4Bl-dPtINm5G9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+</div>
+<nav class="bottom-nav">
+
+  <a href="{% url 'index' %}" class="active">
+    <i class="fa-solid fa-briefcase"></i>
+    Ishlar
+  </a>
+
+  <a href="{% url 'acaunt' %}">
+    <i class="fa-solid fa-user-tie"></i>
+    Profi
+  </a>
+
+  <a href="{% url 'haqida' %}">
+    <i class="fa-solid fa-circle-info"></i>
+    Haqida
+  </a>
+
+  <a href="{% url 'about' %}">
+    <i class="fa-solid fa-circle-question"></i>
+    Yordam
+  </a>
+
+</nav>
+
+
+</body>
+</html>

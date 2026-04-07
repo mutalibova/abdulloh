@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>WorkMate Ultra - Ish turlari</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:linear-gradient(180deg,#f8fafc,#e2e8f0);padding-bottom:140px;color:#0f172a; overflow-x: hidden;}
+
+/* SEARCH */
+.search-wrapper{position:fixed;top:0;left:0;right:0;padding:14px;background:rgba(255,255,255,.88);backdrop-filter:blur(18px);border-bottom:1px solid #e5e7eb;z-index:100;}
+.search-wrapper input{width:100%;padding:12px 16px;border-radius:18px;border:1px solid #cbd5e1;outline:none;}
+
+/* YURUVCHI KATEGORIYALAR */
+.marquee-container { margin-top: 80px; overflow: hidden; white-space: nowrap; padding: 15px 0; display: flex; }
+.marquee-content { display: flex; gap: 12px; animation: scroll-left 30s linear infinite; }
+.marquee-container:active .marquee-content { animation-play-state: paused; }
+
+@keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.filter-btn{padding:8px 18px;border-radius:999px;background:#fff;border:1px solid #cbd5e1;font-size:12px;font-weight:600;cursor:pointer;transition:.3s; white-space: nowrap;}
+.filter-btn.active{background:#2563eb;color:white;border-color:#2563eb;}
+
+/* CARDS GRID */
+.cards{padding:14px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:5px;}
+.card{background:#fff;border-radius:22px;overflow:hidden;border:1px solid #e5e7eb;transition:.35s;cursor:pointer;}
+.card:active{transform:scale(0.95);}
+.card img{width:100%;height:140px;object-fit:cover;}
+.card-body{padding:12px;}
+.title{font-size:13px;font-weight:700; color:#1e293b;}
+.phone{font-size:11px;color:#2563eb;display:flex;gap:5px;margin-top:6px; font-weight: 600;}
+
+/* BOTTOM NAV (Siz xohlagandek o'zgarmas holatda) */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:78px;background:rgba(255,255,255,.92);backdrop-filter:blur(18px);border-top:1px solid #e5e7eb;display:flex;justify-content:space-around;align-items:center;z-index:90;}
+.bottom-nav a{display:flex;flex-direction:column;align-items:center;font-size:11px;color:#64748b;text-decoration:none;}
+.bottom-nav a i{font-size:20px;margin-bottom:4px;}
+.bottom-nav a.active{color:#2563eb;}
+</style>
+</head>
+<body>
+
+<div class="search-wrapper">
+  <input id="searchInput" placeholder="Mutaxassis qidirish...">
+</div>
+
+<div class="marquee-container">
+    <div class="marquee-content" id="marqueeItems">
+        </div>
+</div>
+
+<div class="cards" id="cardsContainer"></div>
+
+<nav class="bottom-nav">
+  <a href="{% url 'index' %}"><i class="fa-solid fa-house"></i><span>Home</span></a>
+  <a href="{% url 'index' %}"><i class="fa-solid fa-briefcase"></i><span>Ishlar</span></a>
+  <a href="{% url 'acaunt' %}"><i class="fa-solid fa-user-tie"></i><span>Profi</span></a>
+  <a href="{% url 'haqida' %}" class="active"><i class="fa-solid fa-circle-info"></i><span>Turi</span></a>
+  <a href="{% url 'about' %}"><i class="fa-solid fa-circle-question"></i><span>Yordam</span></a>
+</nav>
+
+<script>
+const cardsData=[
+  {title:"Uy qurilishi",phone:"+998901234567",type:"quruvchilik",img:"https://i.pinimg.com/236x/1a/0a/b4/1a0ab4e00a136fbdbf475d4bc3f0b7aa.jpg"},
+  {title:"Frontend Dasturchi",phone:"+998912345678",type:"IT",img:"https://i.pinimg.com/236x/5f/35/af/5f35af4cd8ae8965f4fa246b55a5f32b.jpg"},
+  {title:"Elektrik Usta",phone:"+998934567890",type:"ustalik",img:"https://i.pinimg.com/236x/97/ee/42/97ee42a1a17c0a59ef2abdb75f548d15.jpg"},
+  {title:"Grafik Dizayner",phone:"+998901122334",type:"dizayn",img:"https://i.pinimg.com/236x/ec/7c/cb/ec7ccb7ceda37219815a3a07ee67a76f.jpg"},
+  {title:"Avto-Mexanik",phone:"+998907788665",type:"texnika",img:"https://i.pinimg.com/236x/25/a1/5a/25a15a27cf71ebf5febf118cacc85b2e.jpg"},
+  {title:"Xususiy Shifokor",phone:"+998906554433",type:"sogliq",img:"https://i.pinimg.com/236x/6c/59/95/6c599523460f54ddeba81f3cd689ae04.jpg"},
+  {title:"Gazel Haydovchisi",phone:"+998903112233",type:"transport",img:"https://i.pinimg.com/236x/4b/35/56/4b355611c8d817fe74b15aeb9c2c6378.jpg"},
+  {title:"Santexnik",phone:"+998941238899",type:"ustalik",img:"https://i.pinimg.com/236x/3b/b1/ae/3bb1ae1c589effebc898276f7dd37edd.jpg"},
+  {title:"Python Backend",phone:"+998998887766",type:"IT",img:"https://i.pinimg.com/236x/46/95/ab/4695ab2e031f45be1a1a2f2dbe722826.jpg"},
+  {title:"Mebelchi Usta",phone:"+998905554433",type:"ustalik",img:"https://i.pinimg.com/236x/1a/75/26/1a7526b0a53f1fb07fe15ecc2ddb6ca5.jpg"},
+  {title:"SMM Menejer",phone:"+998971112233",type:"dizayn",img:"https://i.pinimg.com/236x/58/0a/07/580a07f313f617932b3bf286b601c8a0.jpg"},
+  {title:"Konditsioner Ustasi",phone:"+998930009988",type:"texnika",img:"https://i.pinimg.com/236x/47/4d/25/474d258412686aa09e8fbb60b5ffbfa8.jpg"}
+];
+
+const cats = ["Barchasi", "Quruvchilik", "IT", "Ustalik", "Dizayn", "Texnika", "Transport", "Sog'liq"];
+const catIds = ["all", "quruvchilik", "IT", "ustalik", "dizayn", "texnika", "transport", "sogliq"];
+
+// Marquee to'ldirish
+const marqueeItems = document.getElementById("marqueeItems");
+function setupMarquee() {
+    const list = [...cats, ...cats]; // Loop uchun 2 marta
+    list.forEach((name, index) => {
+        const btn = document.createElement("button");
+        btn.className = "filter-btn";
+        const id = catIds[index % catIds.length];
+        btn.dataset.filter = id;
+        btn.innerText = name;
+        if(index === 0) btn.classList.add("active");
+        btn.onclick = () => {
+            document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            renderCards(id);
+        }
+        marqueeItems.appendChild(btn);
+    });
+}
+
+const container=document.getElementById("cardsContainer");
+function renderCards(filter="all"){
+  container.innerHTML="";
+  cardsData.forEach(c=>{
+    if(filter==="all" || c.type===filter){
+      container.innerHTML += `
+        <div class="card">
+          <img src="${c.img}">
+          <div class="card-body">
+            <div class="title">${c.title}</div>
+            <div class="phone"><i class="fa-solid fa-phone"></i> ${c.phone}</div>
+          </div>
+        </div>`;
+    }
+  });
+}
+
+const searchInput=document.getElementById("searchInput");
+searchInput.oninput=e=>{
+  const v=e.target.value.toLowerCase();
+  document.querySelectorAll(".card").forEach(c=>{
+    c.style.display=c.innerText.toLowerCase().includes(v)?"block":"none";
+  });
+};
+
+setupMarquee();
+renderCards();
+</script>
+
+</body>
+</html>

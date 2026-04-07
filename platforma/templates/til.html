@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Workmate Pro - Smart Learning</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #007AFF; /* Apple Blue */
+            --success: #34C759;
+            --warning: #FF9500;
+            --danger: #FF3B30;
+            --surface: #F2F2F7;
+            --card: #FFFFFF;
+            --text: #1C1C1E;
+            --text-secondary: #8E8E93;
+            --glass: rgba(255, 255, 255, 0.8);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--surface);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* --- Advanced Header --- */
+        header {
+            position: fixed;
+            top: 0; width: 100%; height: 70px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 1000;
+            border-bottom: 0.5px solid rgba(0,0,0,0.1);
+        }
+
+        .stat-badge {
+            background: var(--card);
+            padding: 8px 12px;
+            border-radius: 20px;
+            display: flex; align-items: center; gap: 6px;
+            font-weight: 700; font-size: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        /* --- Screens Animation --- */
+        main {
+            margin-top: 70px;
+            margin-bottom: 90px;
+            height: calc(100vh - 160px);
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .screen {
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden { display: none !important; }
+
+        /* --- Modern Path Design --- */
+        .path-step {
+            display: flex; flex-direction: column; align-items: center; margin-bottom: 40px;
+        }
+
+        .step-circle {
+            width: 90px; height: 90px;
+            background: var(--card);
+            border-radius: 30px; /* Squircle */
+            display: flex; justify-content: center; align-items: center;
+            font-size: 32px; color: var(--primary);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            cursor: pointer;
+            position: relative;
+            border: 4px solid var(--card);
+        }
+
+        .step-circle::after {
+            content: '';
+            position: absolute; bottom: -45px; width: 4px; height: 40px;
+            background: var(--gray); z-index: -1;
+        }
+
+        .step-circle.completed { background: var(--success); color: white; }
+        .step-circle:active { transform: scale(0.9); }
+
+        /* --- Advanced Flashcards --- */
+        .premium-card {
+            background: var(--card);
+            border-radius: 30px;
+            height: 400px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .premium-card i { font-size: 60px; color: var(--primary); margin-bottom: 20px; }
+
+        /* --- Glass Options --- */
+        .glass-option {
+            background: var(--card);
+            padding: 20px; border-radius: 20px;
+            margin-bottom: 12px; cursor: pointer;
+            border: 2px solid transparent;
+            font-weight: 600;
+            display: flex; align-items: center; gap: 15px;
+        }
+
+        .glass-option:hover { border-color: var(--primary); background: #F0F7FF; }
+        .glass-option.selected { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* --- Bottom Navigation --- */
+        nav {
+            position: fixed; bottom: 0; width: 100%; height: 90px;
+            background: var(--glass); backdrop-filter: blur(15px);
+            display: flex; justify-content: space-around; align-items: center;
+            padding-bottom: 20px;
+            border-top: 0.5px solid rgba(0,0,0,0.1);
+            
+        }
+
+        .nav-link {
+            display: flex; flex-direction: column; align-items: center;
+            color: var(--text-secondary); text-decoration: none; font-size: 22px;
+            cursor: pointer; width: 20%;
+        }
+
+        .nav-link.active { color: var(--primary); }
+        .nav-link span { font-size: 10px; font-weight: 700; margin-top: 5px; text-transform: uppercase; }
+
+        /* --- Settings List --- */
+        .setting-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px; background: var(--card); border-radius: 15px; margin-bottom: 10px;
+        }
+
+        select {
+            padding: 8px; border-radius: 10px; border: 1px solid var(--surface); outline: none;
+        }
+
+        .btn-check {
+            background: var(--primary); color: white; border: none;
+            width: 100%; padding: 18px; border-radius: 20px; font-weight: 800;
+            font-size: 16px; margin-top: 20px; cursor: pointer;
+            box-shadow: 0 8px 15px rgba(0,122,255,0.3);
+        }
+       
+        .bottom-nav a { display: flex; padding: 30px; flex-direction: column; align-items: center; font-size: 0.75rem; color: #6b7280; text-decoration: none; transition: color 0.3s ease; }
+        .bottom-nav a.active, .bottom-nav a:hover { color: #2563eb; }
+        .bottom-nav i { font-size: 1.25rem; margin-bottom: 0.25rem; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="stat-badge" style="color: var(--warning);"><i class="fas fa-bolt"></i> <span id="xp">120</span></div>
+    <div class="stat-badge" style="color: var(--primary);"><i class="fas fa-layer-group"></i> <span id="level">1-Level</span></div>
+    <div class="stat-badge" style="color: var(--danger);"><i class="fas fa-heart"></i> <span id="hearts">5</span></div>
+</header>
+
+<main id="main-content">
+    <div id="screen-home" class="screen">
+        <h1 id="txt-welcome" style="font-weight: 800; font-size: 24px;">Xush kelibsiz!</h1>
+        <div class="path-container" style="padding-top: 20px;">
+            <div class="path-step">
+                <div class="step-circle completed" onclick="startModule('quiz')"><i class="fas fa-rocket"></i></div>
+                <p style="font-weight: 700; margin-top: 15px;" id="txt-step1">Boshlang'ich</p>
+            </div>
+            <div class="path-step">
+                <div class="step-circle" onclick="startModule('flash')" style="color: var(--success);"><i class="fas fa-brain"></i></div>
+                <p style="font-weight: 700; margin-top: 15px;" id="txt-step2">Xotira mashqi</p>
+            </div>
+            <div class="path-step">
+                <div class="step-circle" onclick="startModule('dict')" style="color: var(--warning);"><i class="fas fa-book"></i></div>
+                <p style="font-weight: 700; margin-top: 15px;" id="txt-step3">Lug'at boyligi</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="screen-flash" class="screen hidden">
+        <div class="premium-card" id="flash-box">
+            <i class="fas fa-microphone-lines" onclick="speakCurrentWord(event)"></i>
+            <h1 id="word-main" style="font-size: 36px; margin: 10px 0;">Wait...</h1>
+            <p id="word-sub" style="color: var(--text-secondary); font-size: 18px;"></p>
+        </div>
+        <button class="btn-check" onclick="nextFlashcard()"><span id="txt-next">Keyingisi</span> <i class="fas fa-arrow-right"></i></button>
+    </div>
+
+    <div id="screen-quiz" class="screen hidden">
+        <h2 id="quiz-q" style="margin-bottom: 25px;">Savol?</h2>
+        <div id="quiz-opts"></div>
+        <button class="btn-check" id="btn-quiz-check" onclick="checkAnswer()" disabled>TEKSHIRISH</button>
+    </div>
+
+    <div id="screen-settings" class="screen hidden">
+        <h2 id="txt-settings">Sozlamalar</h2>
+        <div class="setting-item">
+            <span><i class="fas fa-language"></i> Ilova tili</span>
+            <select id="lang-selector" onchange="updateLanguage()">
+                <option value="uz">O'zbekcha</option>
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+            </select>
+        </div>
+        <div class="setting-item">
+            <span><i class="fas fa-moon"></i> Tungi rejim</span>
+            <input type="checkbox" id="dark-mode">
+        </div>
+        <div class="setting-item" style="color: var(--danger);" onclick="location.reload()">
+            <span><i class="fas fa-rotate"></i> Progressni tiklash</span>
+            <i class="fas fa-chevron-right"></i>
+        </div>
+    </div>
+</main>
+
+<nav class="bottom-nav">
+    
+    <a  href="{% url 'home' %}" class="active  "><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <div class="nav-link active" onclick="showScreen('screen-home', this)"><i class="fas fa-compass"></i><span>Uy</span></div>
+    <div class="nav-link" onclick="startModule('quiz', this)"><i class="fas fa-gamepad"></i><span>Mashq</span></div>
+    <div class="nav-link" onclick="showScreen('screen-settings', this)"><i class="fas fa-user-gear"></i><span>Profil</span></div>
+</nav>
+
+<script>
+    // --- MULTI-LANGUAGE SYSTEM ---
+    const i18n = {
+        uz: { welcome: "Xush kelibsiz!", step1: "Boshlang'ich", step2: "Xotira mashqi", step3: "Lug'at boyligi", settings: "Sozlamalar", next: "Keyingisi", check: "TEKSHIRISH" },
+        en: { welcome: "Welcome Back!", step1: "Beginner", step2: "Brain Training", step3: "Vocabulary", settings: "Settings", next: "Next Word", check: "CHECK" },
+        ru: { welcome: "Добро пожаловать!", step1: "Начальный", step2: "Тренировка памяти", step3: "Словарь", settings: "Настройки", next: "Далее", check: "ПРОВЕРИТЬ" }
+    };
+
+    const vocabulary = [
+        { en: "Productivity", uz: "Mahsuldorlik", ru: "Продуктивность" },
+        { en: "Collaboration", uz: "Hamkorlik", ru: "Сотрудничество" },
+        { en: "Deadline", uz: "Muddat", ru: "Дедлайн" },
+        { en: "Efficiency", uz: "Samaradorlik", ru: "Эффективность" }
+    ];
+
+    const quizzes = [
+        { q: "Mahsuldorlik so'zining tarjimasi?", o: ["Productivity", "Deadline", "Task"], a: 0 },
+        { q: "Deadline nimani anglatadi?", o: ["Yangi ish", "Oxirgi muddat", "Hamkorlik"], a: 1 }
+    ];
+
+    let currentIdx = 0;
+    let selectedLang = 'uz';
+
+    function updateLanguage() {
+        selectedLang = document.getElementById('lang-selector').value;
+        const t = i18n[selectedLang];
+        document.getElementById('txt-welcome').innerText = t.welcome;
+        document.getElementById('txt-step1').innerText = t.step1;
+        document.getElementById('txt-step2').innerText = t.step2;
+        document.getElementById('txt-step3').innerText = t.step3;
+        document.getElementById('txt-settings').innerText = t.settings;
+        document.getElementById('txt-next').innerText = t.next;
+        document.getElementById('btn-quiz-check').innerText = t.check;
+    }
+
+    function showScreen(id, el) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+        if(el) {
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+        }
+    }
+
+    function startModule(type) {
+        if(type === 'flash') {
+            currentIdx = 0;
+            updateFlashUI();
+            showScreen('screen-flash');
+        } else if(type === 'quiz') {
+            currentIdx = 0;
+            loadQuiz();
+            showScreen('screen-quiz');
+        } else if(type === 'dict') {
+            alert("Lug'at bo'limi yangilanmoqda...");
+        }
+    }
+
+    function updateFlashUI() {
+        const item = vocabulary[currentIdx];
+        document.getElementById('word-main').innerText = item.en;
+        document.getElementById('word-sub').innerText = item[selectedLang];
+    }
+
+    function nextFlashcard() {
+        if(currentIdx < vocabulary.length - 1) {
+            currentIdx++;
+            updateFlashUI();
+        } else {
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            showScreen('screen-home');
+        }
+    }
+
+    function loadQuiz() {
+        const q = quizzes[currentIdx];
+        document.getElementById('quiz-q').innerText = q.q;
+        const optCont = document.getElementById('quiz-opts');
+        optCont.innerHTML = '';
+        q.o.forEach((opt, i) => {
+            const div = document.createElement('div');
+            div.className = 'glass-option';
+            div.innerHTML = `<i class="far fa-circle"></i> ${opt}`;
+            div.onclick = () => {
+                document.querySelectorAll('.glass-option').forEach(x => x.classList.remove('selected'));
+                div.classList.add('selected');
+                document.getElementById('btn-quiz-check').disabled = false;
+                selectedAns = i;
+            };
+            optCont.appendChild(div);
+        });
+    }
+
+    function checkAnswer() {
+        if(selectedAns === quizzes[currentIdx].a) {
+            confetti({ scalar: 0.7, particleCount: 40 });
+            currentIdx++;
+            if(currentIdx < quizzes.length) loadQuiz();
+            else showScreen('screen-home');
+        } else {
+            alert("Xato! Qayta urinib ko'ring.");
+        }
+    }
+
+    function speakCurrentWord(e) {
+        const text = document.getElementById('word-main').innerText;
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.lang = 'en-US';
+        window.speechSynthesis.speak(msg);
+    }
+</script>
+
+</body>
+</html>

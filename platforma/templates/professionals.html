@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<style>
+  img {
+    background-image: url(/static/img/user.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+</style>
+<body>
+  <!-- Profile Page -->
+<div class="profile-page p-4 pt-6 max-w-md mx-auto bg-white rounded-xl shadow-md mb-20">
+
+  <!-- Profile Header -->
+  <div class="profile-header flex flex-col items-center">
+    <img src="" 
+    
+         class="w-24 h-24 rounded-full border-2 border-blue-500 mb-3 object-cover">
+    <h2 class="text-lg font-semibold">user</h2>
+    <p class="text-gray-500 text-sm">user@example.com</p>
+    <p class="text-gray-400 text-xs mt-1 text-center max-w-[220px]">
+      Salam! Men web va mobil ilovalar ustida ishlayman. Ish va loyiha ma’lumotlari shu yerda.
+    </p>
+  </div>
+
+  <!-- Buttons -->
+  <div class="profile-buttons flex flex-col mt-6 gap-3">
+    <button class="bg-blue-600 text-white py-2 rounded-lg text-sm w-full hover:bg-blue-700 transition">
+      Edit Profile
+    </button>
+    <button class="bg-gray-200 text-gray-700 py-2 rounded-lg text-sm w-full hover:bg-gray-300 transition">
+      Logout
+    </button>
+  </div>
+
+  <!-- Stats -->
+  <div class="profile-stats flex justify-around mt-6 text-center">
+    <div>
+      <h3 class="font-semibold">24</h3>
+      <p class="text-gray-400 text-xs">Ishlar</p>
+    </div>
+    <div>
+      <h3 class="font-semibold">12</h3>
+      <p class="text-gray-400 text-xs">Profi</p>
+    </div>
+    <div>
+      <h3 class="font-semibold">5</h3>
+      <p class="text-gray-400 text-xs">Haqida</p>
+    </div>
+  </div>
+
+</div>
+
+<nav class="bottom-nav fixed bottom-0 left-0 w-full h-16 bg-white border-t flex justify-around items-center z-50">
+
+
+  <a href="{% url 'home' %}" class="flex flex-col items-center justify-center">
+    <i class="fa-solid fa-house"></i>
+    <span class="text-[10px] mt-1">Home</span>
+  </a>
+
+
+  <a href="{% url 'index' %}" class="flex flex-col items-center justify-center">
+    <i class="fa-solid fa-briefcase"></i>
+    <span class="text-[10px] mt-1">Ishlar</span>
+  </a>
+
+
+  <a href="{% url 'professionals' %}" class="flex flex-col items-center justify-center">
+    <i class="fa-solid fa-user-tie"></i>
+    <span class="text-[10px] mt-1">Profi</span>
+  </a>
+
+  <a href="{% url 'haqida' %}" class="flex flex-col items-center justify-center">
+    <i class="fa-solid fa-circle-info"></i>
+    <span class="text-[10px] mt-1">Haqida</span>
+  </a>
+
+
+  <a href="{% url 'about' %}" class="flex flex-col items-center justify-center">
+    <i class="fa-solid fa-circle-question"></i>
+    <span class="text-[10px] mt-1">Yordam</span>
+  </a>
+
+</nav>
+
+
+<style>
+.profile-page{
+  background:white;
+  border-radius:16px;
+  padding:16px;
+  max-width:380px;
+  margin:20px auto;
+  box-shadow:0 4px 12px rgba(0,0,0,0.05);
+  transition:0.3s;
+  margin-bottom:90px; 
+}
+
+body.dark .profile-page{
+  background:#1e293b;
+  color:white;
+}
+
+.profile-header img{
+  object-fit:cover;
+}
+
+.profile-buttons button{
+  transition:0.3s;
+}
+
+.profile-stats div h3{
+  font-size:16px;
+}
+
+.profile-stats div p{
+  font-size:11px;
+}
+
+
+.bottom-nav{
+  background:white;
+  border-top:1px solid #e2e8f0;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+}
+
+body.dark .bottom-nav{
+  background:#1e293b;
+  border-top:1px solid #334155;
+}
+
+.bottom-nav a{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  color:#94a3b8;
+  text-decoration:none;
+  transition:0.2s;
+}
+
+.bottom-nav a.active,
+.bottom-nav a:hover{
+  color:#2563eb;
+}
+
+.bottom-nav i{
+  font-size:18px;
+}
+
+.bottom-nav span{
+  font-size:10px;
+}
+
+
+@media (max-width:400px){
+  .profile-page{
+    padding:12px;
+  }
+  .profile-header img{
+    width:80px;
+    height:80px;
+  }
+}
+</style>
+
+</body>
+</html>

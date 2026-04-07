@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Profil</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    
+    body {
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Mobil Karta */
+    .mobile-container {
+      width: 100%;
+      max-width: 414px; /* iPhone 13/14 Pro Max o'lchami */
+      min-height: 100vh;
+      background: #ffffff;
+      padding-bottom: 80px;
+    }
+
+    .profile-header-bg {
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+      height: 140px;
+      width: 100%;
+      border-radius: 0 0 40px 40px;
+      position: relative;
+    }
+
+    .profile-card {
+      margin-top: -60px;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .avatar-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 30px;
+      border: 4px solid #fff;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      background-image: url('/static/img/user.png');
+      background-size: cover;
+      background-position: center;
+      background-color: #e2e8f0;
+    }
+
+    .online-dot {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      width: 14px;
+      height: 14px;
+      background: #22c55e;
+      border: 2px solid #fff;
+      border-radius: 50%;
+    }
+
+    /* Stats bar */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 25px 0;
+    }
+
+    .stat-item {
+      background: #f8fafc;
+      padding: 12px 5px;
+      border-radius: 18px;
+      border: 1px solid #f1f5f9;
+    }
+
+    /* Menu Buttons */
+    .menu-link {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      margin-bottom: 10px;
+      background: #f8fafc;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .menu-link:active {
+      background: #f1f5f9;
+      transform: scale(0.98);
+    }
+
+    .menu-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+    }
+
+    /* Bottom Nav (O'zgarmas) */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      background: white; border-top: 1px solid #e5e7eb;
+      display: flex; justify-content: space-around; padding: 0.5rem 0; z-index: 50;
+    }
+    .bottom-nav a { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #6b7280; text-decoration: none; }
+    .bottom-nav a.active { color: #2563eb; font-weight: 700; }
+    .bottom-nav i { font-size: 1.2rem; margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+
+<div class="mobile-container">
+  <div class="profile-header-bg"></div>
+
+  <div class="profile-card">
+    <div class="avatar-wrapper">
+      <div class="avatar-img"></div>
+      <div class="online-dot"></div>
+    </div>
+
+    <h2 class="text-xl font-bold text-slate-900 mt-3">{{ user.name }}</h2>
+    <p class="text-slate-500 text-sm">@{{ user.name|lower }}_pro</p>
+    
+    <p class="text-slate-500 text-xs mt-3 px-6 leading-relaxed">
+      Web va mobil ilovalar ustida ishlayman. Ma’lumotlar shu yerda.
+    </p>
+
+    <div class="stats-row">
+      <div class="stat-item">
+        <span class="block font-bold text-slate-800">24</span>
+        <span class="text-[10px] text-slate-400 uppercase tracking-tighter">Ishlar</span>
+      </div>
+      <div class="stat-item">
+        <span class="block font-bold text-slate-800">12</span>
+        <span class="text-[10px] text-slate-400 uppercase tracking-tighter">Profi</span>
+      </div>
+      <div class="stat-item">
+        <span class="block font-bold text-slate-800">5</span>
+        <span class="text-[10px] text-slate-400 uppercase tracking-tighter">Haqida</span>
+      </div>
+    </div>
+
+    <div class="text-left mt-6">
+      <a href="{% url 'see' %}" class="menu-link">
+        <div class="menu-icon bg-blue-100 text-blue-600">
+          <i class="fa-solid fa-user-pen"></i>
+        </div>
+        <div class="flex-1">
+          <span class="block text-sm font-bold text-slate-800">Profilni tahrirlash</span>
+          <span class="text-[10px] text-slate-400">Ma'lumotlarni yangilash</span>
+        </div>
+        <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+      </a>
+
+      <a href="{% url 'register' %}" class="menu-link">
+        <div class="menu-icon bg-red-100 text-red-600">
+          <i class="fa-solid fa-power-off"></i>
+        </div>
+        <div class="flex-1">
+          <span class="block text-sm font-bold text-slate-800">Tizimdan chiqish</span>
+          <span class="text-[10px] text-slate-400">Xavfsiz chiqish</span>
+        </div>
+        <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <a href="{% url 'home' %}"><i class="fa-solid fa-house"></i><span>Home</span></a>
+  <a href="{% url 'index' %}"><i class="fa-solid fa-briefcase"></i><span>Ishlar</span></a>
+  <a href="{% url 'acaunt' %}" class="active"><i class="fa-solid fa-user-tie"></i><span>Profi</span></a>
+  <a href="{% url 'haqida' %}"><i class="fa-solid fa-circle-info"></i><span>turi</span></a>
+  <a href="{% url 'about' %}"><i class="fa-solid fa-circle-question"></i><span>Yordam</span></a>
+</nav>
+
+</body>
+</html>
