@@ -1,16 +1,16 @@
 services:
   - type: web
-    name: platforma
+    name: asosiy
     env: python
     buildCommand: |
       pip install -r requirements.txt
       python manage.py migrate
       python manage.py collectstatic --no-input
-    startCommand: gunicorn platforma.wsgi:application
+    startCommand: gunicorn asosiy.wsgi:application
 
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: platforma.settings
+        value: asosiy.settings
       - key: SECRET_KEY
         value: django-insecure-...
       - key: DEBUG
